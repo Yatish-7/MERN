@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <string.h>
+int wordToDigit(char *word) {
+    if (strcmp(word, "zero") == 0) return 0;
+    if (strcmp(word, "one") == 0) return 1;
+    if (strcmp(word, "two") == 0) return 2;
+    if (strcmp(word, "three") == 0) return 3;
+    if (strcmp(word, "four") == 0) return 4;
+    if (strcmp(word, "five") == 0) return 5;
+    if (strcmp(word, "six") == 0) return 6;
+    if (strcmp(word, "seven") == 0) return 7;
+    if (strcmp(word, "eight") == 0) return 8;
+    if (strcmp(word, "nine") == 0) return 9;
+    return -1;
+}
+
+int main() {
+    char input[1000];
+    fgets(input, sizeof(input), stdin);
+
+    int length = strlen(input);
+    if (input[length - 1] == '\n') {
+        input[length - 1] = '\0';
+    }
+
+    char *token = strtok(input, " ");
+    char output[20];
+    int outputIdx = 0;
+    int consecutiveCount = 1;
+
+    while (token != NULL) {
+        char *nextToken = strtok(NULL, " ");
+        if (nextToken != NULL && strcmp(token, nextToken) == 0) {
+            consecutiveCount++;
+        } else {
+            if (consecutiveCount >= 2) {
+                if (consecutiveCount == 2) {
+                    output[outputIdx++] = 'd';
+                } else if (consecutiveCount == 3) {
+                    output[outputIdx++] = 't';
+                } else {
+                    output[outputIdx++] = 'd';
+                    output[outputIdx++] = 'o';
+                }
+            }
+
+            int digit = wordToDigit(token);
+            if (digit != -1) {
+                output[outputIdx++] = '0' + digit;
+            }
+
+            consecutiveCount = 1;
+        }
+
+        token = nextToken;
+    }
+
+    output[outputIdx] = '\0';
+    printf("%s\n", output);
+
+    return 0;
+}
